@@ -1,6 +1,9 @@
 import discord
 import asyncio
 from discord.ext import commands #Returns a warning, not sure why - // Commands
+from discord.ext.commands import bot
+import traceback
+import time
 import random
 from random import randint
  #For use in dice rolling
@@ -26,27 +29,32 @@ async def roll(ctx,amount:int,dice_type:int):
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
 @bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
 async def d(ctx, die:int):
-    results=[]
-    for role in range(1):
-        x=random.randint(1,die)
-        results.append(x)
-        embedVar=discord.Embed(title = "You rolled a D" + str(die), description = "And you got " + str(results) +"!")
-        embedVar.color=discord.Color.dark_gold()
-    await ctx.send(embed=embedVar)
+    try:
+         results=[]
+         for role in range(1):
+            x=random.randint(1,die)
+            results.append(x)
+            embedVar=discord.Embed(title = "You rolled a D" + str(die), description = "And you got " + str(results) +"!")
+            embedVar.color=discord.Color.dark_gold()
+            await ctx.send(embed=embedVar)
+    except:
+        ctx.send('Something must have gone wrong! Make sure to use proper format, use the help command if you need to check for valid syntax {} '.format(ctx.author.mention))
+   
+
+
     ##} Allows the user to roll a single die // ^d 100 - returns value // ^d 20 - returns value // so on.
-    """
-    An issue I have with most of these commands is that anytime
-    I call some time of int or value immediately after the "command" caller
-    itself, a space char is *absolutely* required. I can't find a
-    way around it. Makes the command "^d 20", rather than "^d20"
-    I feel the latter is more user friendly, but I don't know how
-    to work it in.
-    """
+   ##############################################################################
+   # An issue I have with most of these commands is that anytime                #
+   # I call some time of int or value immediately after the "command" caller    #
+   # itself, a space char is *absolutely* required. I can't find a              #
+   # way around it. Makes the command "^d 20", rather than "^d20"               #
+   # I feel the latter is more user friendly, but I don't know how              #
+   # to work it in.                                                             #
+   ##############################################################################
     ##===End-Dice-Commands==##
 @bot.event
 async def on_ready():
-    activity=discord.Game("Rolling for Innitiative!")
-    await bot.change_presence(status=discord.Game.idle, activity=activity)
+   await bot.bot.change_presence(game=discord.Game(name='Rolling for Innitiative!'))
 ###]-^Last I checked this doesn't work
 ### But hell, figured i'd leave it in case 
 ### it comes in handy
@@ -67,6 +75,8 @@ async def purge_error(ctx, error):
 @bot.event # says when the bot should be ready as a message in VS's CL
 async def on_ready():
     print("Ready to roll!")
+    print("--------------")
+    print (time.strftime("Time at start:\n"+"%H:%M:%S"))
 
 #@bot.command() # allows users to test the response of the bot from Discord
 #async def test(ctx):
