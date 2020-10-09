@@ -1,5 +1,4 @@
 import discord
-from .enums import ActivityType, try_enum
 import asyncio
 from discord.ext import commands #Returns a warning, not sure why - // Commands
 from discord.ext.commands import bot
@@ -34,16 +33,6 @@ https://github.com/meew0/discord-bot-best-practices
 Helpful:
 https://github.com/Rapptz/discord.py
 """
-#### Not working presently, will leave in case it becomes useful(other funcs removed):
-#@client.event #also for stats, but does things i think. Needs testing
-#async def on_member_join(member): 
-#    global joined
-#    joined += 1
-#    for channel in member.server.channels:
-#        if str(channel)=="general":
-#            await client.send_message(f"""Welcome {member.mention}!""")
-#
-#-------->
 
 ##[Start-Dice-Functions]##
 @bot.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
@@ -113,33 +102,6 @@ async def choose(ctx, *choices: str):
 async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
-
-
-
-#-------------------------------------------------------
-#Stat Blocks::::::::::::::::: Not Working in the Slightest, from my testing -- Will leave in case it's useful
-#async def update_stats():
-#    await client.wait_until_ready()
-#    global messages, joined
-#
-#    while not client.is_closed():
-#        try:
-#            with open("stats.txt", "a") as f:
-#                f.write(f"Time: {int(time.time())}, Messages: {messages}, Members Joined: {joined}\n")
-#            messages = 0
-#            joined = 0
-#            await asyncio.sleep(5)
-#        except Exception as e:
-#            print(e)
-#            await asyncio.sleep(5)
-#End Stat blocks
-###----------------
-
-
-
-
-
-
 
 @bot.command() # shuts down the bot
 async def stop(ctx):
