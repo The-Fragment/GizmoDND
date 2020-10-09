@@ -2,7 +2,8 @@ import discord
 import asyncio
 from discord.ext import commands #Returns a warning, not sure why - // Commands
 import random
-from random import randint #For use in dice rolling
+from random import randint
+ #For use in dice rolling
 import sys #Safety feature for shutting down the bot, so I've read
 bot = commands.Bot(command_prefix='^')
 """
@@ -13,13 +14,15 @@ https://github.com/meew0/discord-bot-best-practices
 """
 ##[Start-Dice-Functions]##
 @bot.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
-async def roll(ctx, amount: int, dice_type:int):
-    results = []
-    for role in range(amount):
-        x = random.randit(1, dice_type)
+async def roll(ctx,amount:int,dice_type:int):
+     results = []
+     for role in range(amount):
+        x = random.randint(1, dice_type)
         results.append(x)
-        embedVar=discord.Embed(title= "You rolled" +str(amount)+"D"+str(dice_types),description = "\n***And here is your results....***\n"+str(results))
-    await ctx.send(embedVar)
+        embedVar=discord.Embed(title="You rolled " +str(amount)+" D"+str(dice_type)+ "'s",description   = "\n***And here is your results....***\n\n\n"+str(results))
+        embedVar.color=discord.Color.purple()
+        
+     await ctx.send(embed=embedVar)
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
 @bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
 async def d(ctx, die:int):
@@ -27,7 +30,8 @@ async def d(ctx, die:int):
     for role in range(1):
         x=random.randint(1,die)
         results.append(x)
-        embedVar=discord.Embed(title = "You rolled a D" + str(die), description = "And you got " + str(results) +"!", color=0x00ff00)
+        embedVar=discord.Embed(title = "You rolled a D" + str(die), description = "And you got " + str(results) +"!")
+        embedVar.color=discord.Color.dark_gold()
     await ctx.send(embed=embedVar)
     ##} Allows the user to roll a single die // ^d 100 - returns value // ^d 20 - returns value // so on.
     """
@@ -39,7 +43,7 @@ async def d(ctx, die:int):
     to work it in.
     """
     ##===End-Dice-Commands==##
-@client.event()
+@bot.event
 async def on_ready():
     activity=discord.Game("Rolling for Innitiative!")
     await bot.change_presence(status=discord.Game.idle, activity=activity)
