@@ -21,10 +21,12 @@ bot = commands.Bot(command_prefix='^')
 #will only allow us to do certain things - such as
 #setting playing, watching, streaming, etc, activity
 # -- i don't know what else it entails.
-
-@client.event
+@client.event 
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game('Rolling for initiative...'))
+    print("Ready to roll!")
+    print("--------------")
+    print (time.strftime("Time at start:\n"+"%H:%M:%S"))
     #await client.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('Star Wars')) -- Alternatives,
     # You've gotta lot of options with these
 @bot.command()
@@ -100,12 +102,7 @@ async def purge(ctx,limit:int):
 async def purge_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("Ha! You're not worthy!")
-##----------------------------------------------
-@client.event # says when the bot should be ready as a message in VS's CL
-async def on_ready():
-    print("Ready to roll!")
-    print("--------------")
-    print (time.strftime("Time at start:\n"+"%H:%M:%S"))
+##-----------------------------------------
 
 @bot.command() # allows users to test the response of the bot from Discord
 async def test(ctx):
