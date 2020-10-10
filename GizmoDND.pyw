@@ -7,22 +7,43 @@ import time
 import random
 from random import randint#For use in dice rolling
 import sys #Safety feature for shutting down the bot, so I've read
+from discord.utils import get
+import urllib.parse, urllib.request, re
 #///////////
 
 client = discord.Client()
 bot = commands.Bot(command_prefix='^')
-#messages = joined = 0 // for stats
+
+#Not going to lie, im somewhat angry --
+#It seems like @client.event // @bot.event are
+#Interchangeable in certain circumstances
+#Due to rewriting and updates, but client.event
+#will only allow us to do certain things - such as
+#setting playing, watching, streaming, etc, activity
+# -- i don't know what else it entails.
+
+@client.event
+async def on_ready():
+    await client.change_presence(status=discord.Status.online, activity=discord.Game('Rolling for initiative...'))
+    #await client.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('Star Wars')) -- Alternatives,
+    # You've gotta lot of options with these
+@bot.command()
+async def dev(ctx):
+    devEmbed = discord.Embed(title="Developers:", description= "**These peeps worked to bring me to me to what I am today:**\n" 
+                             +"\nflop#2371\nSeltzer#0006\n\n"
+                             +"**Version:**\t 0.0.0\n"
+                             +"**Date Released:** \t N/A",color=discord.Color.purple())
+    await ctx.send(embed=devEmbed)
+    #playing with embeds
 
 async def on_member_join(self, member):
         guild = member.guild
         if guild.system_channel is not None:
             to_send = 'Welcome {0.mention} to {1.name}!'.format(member, guild)
             await guild.system_channel.send(to_send)
-
-
+      
 intents = discord.Intents.default()
 intents.members = True
-
 
 """
 Trying to follow good practice
@@ -48,7 +69,6 @@ async def roll(ctx,amount:int,dice_type:int):
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
 @bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
 async def d(ctx, die:int):
-    try:
          results=[]
          for role in range(1):
             x=random.randint(1,die)
@@ -56,11 +76,9 @@ async def d(ctx, die:int):
             embedVar=discord.Embed(title = "You rolled a D" + str(die), description = "And you got " + str(results) +"!")
             embedVar.color=discord.Color.dark_gold()
             await ctx.send(embed=embedVar)
-    except:
-        ctx.send('Something must have gone wrong! Make sure to use proper format, use the help command if you need to check for valid syntax {} '.format(ctx.author.mention))
+  
    ##Allows the user to roll a single die // ^d 100 - returns value // ^d 20 - returns value // so on.
-   ##Try / Catch isn't working
-   ##Would like some kinda error handle
+   ##Would like some kinda error handle^
    ##############################################################################
    # An issue I have with most of these commands is that anytime                #
    # I call some time of int or value immediately after the "command" caller    #
@@ -83,7 +101,7 @@ async def purge_error(ctx, error):
     if isinstance(error, commands.MissingPermissions):
         await ctx.send("Ha! You're not worthy!")
 ##----------------------------------------------
-@bot.event # says when the bot should be ready as a message in VS's CL
+@client.event # says when the bot should be ready as a message in VS's CL
 async def on_ready():
     print("Ready to roll!")
     print("--------------")
@@ -107,4 +125,5 @@ async def joined(ctx, member: discord.Member):
 async def stop(ctx):
     await ctx.send(("Logging out. See you next session!").format(ctx.author))
     sys.exit()
-bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
+
+client.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
