@@ -9,10 +9,9 @@ from random import randint#For use in dice rolling
 import sys #Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import urllib.parse, urllib.request, re
+import Active
 #///////////
-
-client = discord.Client()
-bot = commands.Bot(command_prefix='^')
+client = commands.Bot(command_prefix='^')
 
 #Not going to lie, im somewhat angry --
 #It seems like @client.event // @bot.event are
@@ -21,21 +20,15 @@ bot = commands.Bot(command_prefix='^')
 #will only allow us to do certain things - such as
 #setting playing, watching, streaming, etc, activity
 # -- i don't know what else it entails.
-@client.event 
-async def on_ready():
-    await client.change_presence(status=discord.Status.online, activity=discord.Game('Rolling for initiative...'))
-    print("Ready to roll!")
-    print("--------------")
-    print (time.strftime("Time at start:\n"+"%H:%M:%S"))
-    #await client.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('Star Wars')) -- Alternatives,
-    # You've gotta lot of options with these
-@bot.command()
-async def dev(ctx):
-    devEmbed = discord.Embed(title="Developers:", description= "**These peeps worked to bring me to me to what I am today:**\n" 
-                             +"\nflop#2371\nSeltzer#0006\n\n"
-                             +"**Version:**\t 0.0.0\n"
-                             +"**Date Released:** \t N/A",color=discord.Color.purple())
-    await ctx.send(embed=devEmbed)
+@client.command(name='dev')
+async def dev(context):
+
+     devEmbed = discord.Embed(title="Developers:", description= "**These peeps worked to bring me to me to what I am today:**\n" 
+                                 +"\nflop#2371\nSeltzer#0006\n\n"
+                                 +"**Version:**\t 0.0.0\n"
+                                 +"**Date Released:** \t N/A",color=discord.Color.purple())
+       
+     await context.message.channel.send(embed=devEmbed)                                            
     #playing with embeds
 
 async def on_member_join(self, member):
@@ -58,7 +51,7 @@ https://github.com/Rapptz/discord.py
 """
 
 ##[Start-Dice-Functions]##
-@bot.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
+@client.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
 async def roll(ctx,amount:int,dice_type:int):
      results = []
      for role in range(amount):
@@ -69,7 +62,7 @@ async def roll(ctx,amount:int,dice_type:int):
         
      await ctx.send(embed=embedVar)
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
-@bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
+@client.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
 async def d(ctx, die:int):
          results=[]
          for role in range(1):
@@ -92,33 +85,33 @@ async def d(ctx, die:int):
     ##===End-Dice-Commands==##
 
 ############## Purge #######################
-@bot.command(pass_context=True, description='Purge the messages of a channel / Admin Perms.')
-@commands.bot_has_permissions(administrator=True)
-async def purge(ctx,limit:int):
-    await ctx.channel.purge(limit=limit)
-    await ctx.send('Cleared by this guy: {}'.format(ctx.author.mention)) 
-##^Just purges stuff pretty much
-@purge.error ##Simple error checking
-async def purge_error(ctx, error):
-    if isinstance(error, commands.MissingPermissions):
-        await ctx.send("Ha! You're not worthy!")
-##-----------------------------------------
+#@client.command(pass_context=True, description='Purge the messages of a channel / Admin Perms.')
+#@commands.bot_has_permissions(administrator=True)
+#async def purge(ctx,limit:int):
+#    await ctx.channel.purge(limit=limit)
+#    await ctx.send('Cleared by this guy: {}'.format(ctx.author.mention)) 
+###^Just purges stuff pretty much
+#@purge.error ##Simple error checking
+#async def purge_error(ctx, error):
+#    if isinstance(error, commands.MissingPermissions):
+#        await ctx.send("Ha! You're not worthy!")
+###------Gonna worry about this one later lol----------------------------------------
 
-@bot.command() # allows users to test the response of the bot from Discord
+@client.command # allows users to test the response of the bot from Discord
 async def test(ctx):
     await ctx.send('Ready to roll!'.format(ctx.author))
 
-@bot.command(description='For when you wanna settle the score some other way')
+@client.command(description='For when you wanna settle the score some other way')
 async def choose(ctx, *choices: str):
     """Chooses between multiple choices."""
     await ctx.send(random.choice(choices))
 
-@bot.command()
+@client.command
 async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
 
-@bot.command() # shuts down the bot
+@client.command # shuts down the bot
 async def stop(ctx):
     await ctx.send(("Logging out. See you next session!").format(ctx.author))
     sys.exit()
