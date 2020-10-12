@@ -114,7 +114,7 @@ async def d(ctx, die:int):
 @bot.command(pass_context=True, description='Purge the messages of a channel / Admin Perms.')
 @commands.bot_has_permissions(administrator=True)
 async def purge(ctx,limit:int):
-    await ctx.channel.purge(limit=limit)
+    await ctx.channel.purge(limit=limit+1)
     await asyncio.sleep(2)
     await ctx.send('Cleared by this guy: {}'.format(ctx.author.mention)) 
 ##^Just purges stuff pretty much
