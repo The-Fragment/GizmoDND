@@ -138,12 +138,6 @@ async def r(ctx, roll:str):
      except Exception as e:
          print (e)
          return
-
-    # for role in range(amount):
-   #   x = random.randint(1, dice_type)
-   #   results.append(x)
-   #   embedVar=discord.Embed(title="You rolled " +str(amount)+" D"+str(dice_type)+ "'s",description   = "\n***And here is your results....***\n\n\n"+str(results))
-   #   embedVar.color=discord.Color.purple()
      
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
 @bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
@@ -156,16 +150,9 @@ async def d(ctx, die:int):
             embedVar.color=discord.Color.dark_gold()
             await ctx.send(embed=embedVar)
   
-   ##Allows the user to roll a single die // ^d 100 - returns value // ^d 20 - returns value // so on.
-   ##Would like some kinda error handle^
-   ##############################################################################
-   # An issue I have with most of these commands is that anytime                #
-   # I call some time of int or value immediately after the "command" caller    #
-   # itself, a space char is *absolutely* required. I can't find a              #
-   # way around it. Makes the command "^d 20", rather than "^d20"               #
-   # I feel the latter is more user friendly, but I don't know how              #
-   # to work it in.                                                             #
-   ##############################################################################
+  # d == old dice command
+  # roll == the dice command she tells you not to worry about 
+  # keeping d for context
     ##===End-Dice-Commands==##
 
 ############## Purge #######################
