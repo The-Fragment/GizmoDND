@@ -33,21 +33,21 @@ https://github.com/Rapptz/discord.py
 async def status_task():
     while True:
         await bot.change_presence(status=discord.Status.online, activity=discord.Game('Depression in VR'))
-        await asyncio.sleep(30)
+        await asyncio.sleep(45)
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('with Jays mom'))
-        await asyncio.sleep(30)
+        await asyncio.sleep(45)
         await bot.change_presence(status=discord.Status.online, activity=discord.Game('Cat Simulator 2'))
-        await asyncio.sleep(30)
-        # await bot.change_presence(status=discord.Status.online, activity=discord.ActivityType.watching('for ^help'))
-        # await asyncio.sleep(10)
-        # await bot.change_presence(status=discord.Status.online, activity=discord.CustomActivity('rolling a ^d 20'))
-        # await asyncio.sleep(10)
-        # await bot.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('for sus members...'))
-        # await asyncio.sleep(10)
+        await asyncio.sleep(45)
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('Playing Genshin Impact'))
-        await asyncio.sleep(30)
+        await asyncio.sleep(45)
         await bot.change_presence(status=discord.Status.idle, activity=discord.Game('osu!'))
-        await asyncio.sleep(30)
+        await asyncio.sleep(45)
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="MEGALOVANIA"))
+        await asyncio.sleep(45)
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Emperor's New Groove"))
+        await asyncio.sleep(45)
+        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.streaming, name="Among Us"))
+        await asyncio.sleep(45)
         # commented out code that doesn't seem to work. Docs said it should, but I dunno.
         # leaving it in there just in case, because we may need it later
 
@@ -92,7 +92,7 @@ async def on_command_error(error, ctx):
 
 
 ##[Start-Dice-Functions]##
-@bot.command(pass_context=True)
+@bot.command()
 async def r(ctx, roll: str):
     results = 0
     resultString = ''
@@ -138,7 +138,7 @@ async def r(ctx, roll: str):
 
 
 ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
-@bot.command(pass_context=True, description='Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
+@bot.command(pass_context=True)
 async def d(ctx, die: int):
     results = []
     for role in range(1):
@@ -155,7 +155,7 @@ async def d(ctx, die: int):
 ##===End-Dice-Commands==##
 
 ############## Purge #######################
-@bot.command(pass_context=True, description='Purge the messages of a channel / Admin Perms.')
+@bot.command()
 @commands.bot_has_permissions(administrator=True)
 async def purge(ctx, limit: int):
     await ctx.channel.purge(limit=limit + 1)
@@ -177,7 +177,7 @@ async def test(ctx):
     await ctx.send('Ready to roll!'.format(ctx.author))
 
 
-@bot.command(description='For when you wanna settle the score some other way')
+@bot.command()
 async def choose(ctx, *choices: str):
     """Chooses between multiple choices."""
     await ctx.send(random.choice(choices))
