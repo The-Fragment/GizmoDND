@@ -54,7 +54,7 @@ async def on_ready():
     bot.loop.create_task(status_task())
     print("Ready to roll!")
     print("--------------")
-    print (time.strftime("Time at start:\n"+"%H:%M:%S"))
+    print(time.strftime("Time at start:\n"+"%H:%M:%S"))
 
     #await client.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('Star Wars')) -- Alternatives,
     # You've gotta lot of options with these
@@ -70,9 +70,20 @@ async def dev(ctx):
                                  +"**Date Released:** \t N/A",color=discord.Color.purple())
        
      await ctx.send(embed=devEmbed)                                            
+
+
+@bot.command(pass_context=True, description="Displays this message")
+async def help(ctx):
+    helpEmbed=discord.Embed(title="In your hour of need! Gizmo is here~", description="**Commands:**\n"+
+                            "**- r** -> Roll some dice (Format 1d20)\n"+
+                            "**- purge** -> Delete some messages (Format purge 3)\n"+
+                            "**-choose** -> Gizmo will decide!\n(Format:^choose pizza burgers)\n" +
+                            "**-dev** -> See the Development Team/Version\n"+
+                            "\n\n***Gizmo is still a kitten, let us know about any possible bugs!***", color=discord.Color.orange())
+    await ctx.author.send(embed=helpEmbed)
     #playing with embeds
 #////// Who's who: ///////
-async def on_member_join(self, member):
+async def on_member_join(ctx, member):
         guild = member.guild
         if guild.system_channel is not None:
             to_send = 'Welcome {0.mention} to {1.name}!'.format(member, guild)
