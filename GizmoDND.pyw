@@ -10,25 +10,59 @@ import sys #Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import urllib.parse, urllib.request, re
 import time
-#///////////
+#/////////// Start Up, "Front End" /////////////
 bot = discord.Client()
 bot = commands.Bot(command_prefix='^')
+intents = discord.Intents.default()
+intents.members = True
+"""
+Trying to follow good practice
+with Bot command calls. Simply using:
+'!', '?', '.', etc., is problematic.
+https://github.com/meew0/discord-bot-best-practices
+---
+Helpful:
+https://github.com/Rapptz/discord.py
+"""
 
 @bot.event
+async def status_task():
+    while True:
+        await bot.change_presence(status=discord.Status.online, activity=discord.Game('Depression in VR'))
+        await asyncio.sleep(30)
+        await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('with Jays mom'))
+        await asyncio.sleep(30)
+        await bot.change_presence(status=discord.Status.online, activity=discord.Game('Cat Simulator 2'))
+        await asyncio.sleep(30)
+        #await bot.change_presence(status=discord.Status.online, activity=discord.ActivityType.watching('for ^help'))
+        #await asyncio.sleep(10)
+       # await bot.change_presence(status=discord.Status.online, activity=discord.CustomActivity('rolling a ^d 20'))
+        #await asyncio.sleep(10)
+        #await bot.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('for sus members...'))
+       # await asyncio.sleep(10)
+        await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('Playing Genshin Impact'))
+        await asyncio.sleep(30)
+
+        #commented out code that doesn't seem to work. Docs said it should, but I dunno.
+        #leaving it in there just in case, because we may need it later
+    
+@bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game('with Depression in VR'))
+    bot.loop.create_task(status_task())
     print("Ready to roll!")
     print("--------------")
     print (time.strftime("Time at start:\n"+"%H:%M:%S"))
+
     #await client.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('Star Wars')) -- Alternatives,
     # You've gotta lot of options with these
 
+#///////////////// End "Front End" ///////////////////////
 
 @bot.command()
 async def dev(ctx):
 
      devEmbed = discord.Embed(title="Developers:", description= "**These peeps worked to bring me to me to what I am today:**\n" 
-                                 +"\nflop#2371\nSeltzer#0006\n\n"
+                                 +"\nflop#2371\nSeltzer#0006\nklb#5169\n\n"
                                  +"**Version:**\t 0.0.0\n"
                                  +"**Date Released:** \t N/A",color=discord.Color.purple())
        
@@ -41,18 +75,6 @@ async def on_member_join(self, member):
             to_send = 'Welcome {0.mention} to {1.name}!'.format(member, guild)
             await guild.system_channel.send(to_send)
       
-intents = discord.Intents.default()
-intents.members = True
-
-"""
-Trying to follow good practice
-with Bot command calls. Simply using:
-'!', '?', '.', etc., is problematic.
-https://github.com/meew0/discord-bot-best-practices
----
-Helpful:
-https://github.com/Rapptz/discord.py
-"""
 
 ##[Start-Dice-Functions]##
 @bot.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
@@ -89,16 +111,17 @@ async def d(ctx, die:int):
     ##===End-Dice-Commands==##
 
 ############## Purge #######################
-#@client.command(pass_context=True, description='Purge the messages of a channel / Admin Perms.')
-#@commands.bot_has_permissions(administrator=True)
-#async def purge(ctx,limit:int):
-#    await ctx.channel.purge(limit=limit)
-#    await ctx.send('Cleared by this guy: {}'.format(ctx.author.mention)) 
-###^Just purges stuff pretty much
-#@purge.error ##Simple error checking
-#async def purge_error(ctx, error):
-#    if isinstance(error, commands.MissingPermissions):
-#        await ctx.send("Ha! You're not worthy!")
+@bot.command(pass_context=True, description='Purge the messages of a channel / Admin Perms.')
+@commands.bot_has_permissions(administrator=True)
+async def purge(ctx,limit:int):
+    await ctx.channel.purge(limit=limit)
+    await asyncio.sleep(2)
+    await ctx.send('Cleared by this guy: {}'.format(ctx.author.mention)) 
+##^Just purges stuff pretty much
+@purge.error ##Simple error checking
+async def purge_error(ctx, error):
+    if isinstance(error, commands.MissingPermissions):
+        await ctx.send("Ha! You're not worthy!")
 ###------Gonna worry about this one later lol----------------------------------------
 
 @bot.command() # allows users to test the response of the bot from Discord
