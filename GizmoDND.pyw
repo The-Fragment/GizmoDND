@@ -136,6 +136,17 @@ async def r(ctx, roll: str):
         print(e)
         return
 
+# outputs username + whole message after command
+@bot.command()
+async def cTest(ctx, *, arg):
+    user = (ctx.message.author)
+    formatUser = str(user)
+    # gets rid of anything past # for example klb#5169 -> klb
+    x = formatUser.index("#")
+    formatUser = formatUser[0:x]
+
+    testVar = discord.Embed(title="Member: " + str(formatUser) + " said: " + arg)
+    await ctx.send(embed=testVar)
 
 ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
 @bot.command(pass_context=True)
@@ -161,7 +172,7 @@ async def purge(ctx, limit: int):
     await ctx.channel.purge(limit=limit + 1)
     await asyncio.sleep(2)
     await ctx.send('Cleared by this guy: {}'.format(ctx.author.mention))
-
+ 
 
 ##^Just purges stuff pretty much
 @purge.error  ##Simple error checking
