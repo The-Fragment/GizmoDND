@@ -9,7 +9,6 @@ from random import randint#For use in dice rolling
 import sys #Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import urllib.parse, urllib.request, re
-import Active
 import time
 #///////////
 bot = discord.Client()
@@ -17,7 +16,7 @@ bot = commands.Bot(command_prefix='^')
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.Game('fuckin trying, ok?'))
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game('with Depression in VR'))
     print("Ready to roll!")
     print("--------------")
     print (time.strftime("Time at start:\n"+"%H:%M:%S"))
