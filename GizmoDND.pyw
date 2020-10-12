@@ -14,6 +14,7 @@ import re
 #/////////// Start Up, "Front End" /////////////
 bot = discord.Client()
 bot = commands.Bot(command_prefix='^')
+bot.remove_command('help')
 intents = discord.Intents.default()
 intents.members = True
 """
@@ -43,7 +44,7 @@ async def status_task():
        # await asyncio.sleep(10)
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('Playing Genshin Impact'))
         await asyncio.sleep(30)
-        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('OSU!'))
+        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('osu!'))
         await asyncio.sleep(30)
         #commented out code that doesn't seem to work. Docs said it should, but I dunno.
         #leaving it in there just in case, because we may need it later
@@ -184,6 +185,8 @@ async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
 
+#///////////Test/////////////////////
+#////////////////////////////////////
 @bot.command() # shuts down the bot
 async def stop(ctx):
     await ctx.send(("Logging out. See you next session!").format(ctx.author))
