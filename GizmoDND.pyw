@@ -10,25 +10,30 @@ import sys #Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import urllib.parse, urllib.request, re
 import Active
+import time
 #///////////
-client = commands.Bot(command_prefix='^')
+bot = discord.Client()
+bot = commands.Bot(command_prefix='^')
 
-#Not going to lie, im somewhat angry --
-#It seems like @client.event // @bot.event are
-#Interchangeable in certain circumstances
-#Due to rewriting and updates, but client.event
-#will only allow us to do certain things - such as
-#setting playing, watching, streaming, etc, activity
-# -- i don't know what else it entails.
-@client.command(name='dev')
-async def dev(context):
+@bot.event
+async def on_ready():
+    await bot.change_presence(status=discord.Status.online, activity=discord.Game('fuckin trying, ok?'))
+    print("Ready to roll!")
+    print("--------------")
+    print (time.strftime("Time at start:\n"+"%H:%M:%S"))
+    #await client.change_presence(status=discord.Status.dnd, activity=discord.ActivityType.watching('Star Wars')) -- Alternatives,
+    # You've gotta lot of options with these
+
+
+@bot.command()
+async def dev(ctx):
 
      devEmbed = discord.Embed(title="Developers:", description= "**These peeps worked to bring me to me to what I am today:**\n" 
                                  +"\nflop#2371\nSeltzer#0006\n\n"
                                  +"**Version:**\t 0.0.0\n"
                                  +"**Date Released:** \t N/A",color=discord.Color.purple())
        
-     await context.message.channel.send(embed=devEmbed)                                            
+     await ctx.send(embed=devEmbed)                                            
     #playing with embeds
 
 async def on_member_join(self, member):
@@ -51,7 +56,7 @@ https://github.com/Rapptz/discord.py
 """
 
 ##[Start-Dice-Functions]##
-@client.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
+@bot.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
 async def roll(ctx,amount:int,dice_type:int):
      results = []
      for role in range(amount):
@@ -62,7 +67,7 @@ async def roll(ctx,amount:int,dice_type:int):
         
      await ctx.send(embed=embedVar)
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
-@client.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
+@bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
 async def d(ctx, die:int):
          results=[]
          for role in range(1):
@@ -97,23 +102,23 @@ async def d(ctx, die:int):
 #        await ctx.send("Ha! You're not worthy!")
 ###------Gonna worry about this one later lol----------------------------------------
 
-@client.command # allows users to test the response of the bot from Discord
+@bot.command() # allows users to test the response of the bot from Discord
 async def test(ctx):
     await ctx.send('Ready to roll!'.format(ctx.author))
 
-@client.command(description='For when you wanna settle the score some other way')
+@bot.command(description='For when you wanna settle the score some other way')
 async def choose(ctx, *choices: str):
     """Chooses between multiple choices."""
     await ctx.send(random.choice(choices))
 
-@client.command
+@bot.command()
 async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
 
-@client.command # shuts down the bot
+@bot.command() # shuts down the bot
 async def stop(ctx):
     await ctx.send(("Logging out. See you next session!").format(ctx.author))
     sys.exit()
 
-client.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
+bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
