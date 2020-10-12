@@ -10,6 +10,7 @@ import sys #Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import urllib.parse, urllib.request, re
 import time
+import re
 #/////////// Start Up, "Front End" /////////////
 bot = discord.Client()
 bot = commands.Bot(command_prefix='^')
@@ -42,7 +43,8 @@ async def status_task():
        # await asyncio.sleep(10)
         await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('Playing Genshin Impact'))
         await asyncio.sleep(30)
-
+        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('OSU!'))
+        await asyncio.sleep(30)
         #commented out code that doesn't seem to work. Docs said it should, but I dunno.
         #leaving it in there just in case, because we may need it later
     
@@ -68,25 +70,69 @@ async def dev(ctx):
        
      await ctx.send(embed=devEmbed)                                            
     #playing with embeds
-
+#////// Who's who: ///////
 async def on_member_join(self, member):
         guild = member.guild
         if guild.system_channel is not None:
             to_send = 'Welcome {0.mention} to {1.name}!'.format(member, guild)
-            await guild.system_channel.send(to_send)
-      
+            await ctx.send(to_send)
+    
+@bot.event
+async def on_command_error(error, ctx):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Please use proper formatting. Use ^help for more info.')
+
 
 ##[Start-Dice-Functions]##
-@bot.command(pass_context=True, description='Roll multiple Dice: (Prefix)roll (Ammount) (Die) // !roll 3 20, returns three D20 rolls')
-async def roll(ctx,amount:int,dice_type:int):
-     results = []
-     for role in range(amount):
-        x = random.randint(1, dice_type)
-        results.append(x)
-        embedVar=discord.Embed(title="You rolled " +str(amount)+" D"+str(dice_type)+ "'s",description   = "\n***And here is your results....***\n\n\n"+str(results))
-        embedVar.color=discord.Color.purple()
-        
-     await ctx.send(embed=embedVar)
+@bot.command(pass_context=True)
+async def r(ctx, roll:str):
+     results = 0
+     resultString=''
+     try:
+         try:
+             numDice=roll.split('d')[0]
+             diceVal=roll.split('d')[1]
+         except Exception as e:
+             print (e)
+             await ctx.send("Use proper format! #d# %s." % (ctx.author.mention))
+             return
+         if int(numDice)>500:
+             await ctx.send("Woah! too much!" % (ctx.author.mention))
+             return
+            
+         await ctx.send("Rolling %s d%s for %s" %(numDice, diceVal, ctx.message.author.name))
+         rolls, limit = map(int,roll.split('d'))
+         for r in range(rolls):
+             number = random.randint(1, limit)
+             results = results + number
+             if resultString == '':
+                 resultString += str(number)
+             else:
+                resultString +=', '+ str(number)
+
+         if resultString == '20':
+             await ctx.send((ctx.author.mention)+ "  :game_die:\n**Critical Success!** " + resultString)
+         else:
+             if resultString == '1':
+                 await ctx.send((ctx.author.mention)+ "  :game_die:\n**Critical Failure!** " + resultString)
+             else:
+
+
+                 if numDice =='1':
+                     await ctx.send((ctx.author.mention)+ "  :game_die:\n**Result:** " + resultString)
+                 else:
+                     await ctx.send((ctx.author.mention)+"  :game_die:\n**Result:** " + resultString + "\n**Total:** " + str(results))
+
+     except Exception as e:
+         print (e)
+         return
+
+    # for role in range(amount):
+   #   x = random.randint(1, dice_type)
+   #   results.append(x)
+   #   embedVar=discord.Embed(title="You rolled " +str(amount)+" D"+str(dice_type)+ "'s",description   = "\n***And here is your results....***\n\n\n"+str(results))
+   #   embedVar.color=discord.Color.purple()
+     
     ##}} Allows the users to call a command as such: ^roll 2 20 // will Return value of 2 D20 die {{##
 @bot.command(pass_context=True, description= 'Roll a single Die: (Prefix)d (Die) // !d 20, returns a d20 roll')
 async def d(ctx, die:int):
