@@ -1,6 +1,7 @@
 import random
 from random import randint  # For use in dice rolling
 
+# Ex. takes in 2d20 and outputs the string Rolling 2 d20
 def roll_str(rolls):
     try:
         numDice = rolls.split('d')[0]
@@ -10,6 +11,7 @@ def roll_str(rolls):
         return "Use proper format!"
     return "Rolling %s d%s" % (numDice, diceVal)
 
+# Ex. takes in 2d20 and outputs resultString = 11, 19 results = 30 numDice = 2
 def roll(rolls):
     results = 0
     resultString = ''
@@ -27,6 +29,7 @@ def roll(rolls):
                 resultString += str(number)
             else:
                 resultString += ', ' + str(number)
+        # Returns 3 variables, make sure to store in 3 variables
         return resultString,results,numDice
 
     except Exception as e:

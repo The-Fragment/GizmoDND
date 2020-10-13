@@ -96,26 +96,20 @@ async def on_command_error(error, ctx):
 @bot.command()
 async def r(ctx, rolls: str):
     resultString,results,numDice = roll(rolls)
-    await ctx.send(roll_str(rolls) + " for %s" % (ctx.message.author.name))
+    await ctx.send(roll_str(rolls) + " for %s" % ctx.message.author.name)
     if resultString == '20':
-        await ctx.send((ctx.author.mention) + "  :game_die:\n**Critical Success!** " + resultString)
+        await ctx.send(ctx.author.mention + "  :game_die:\n**Critical Success!** " + resultString)
     elif resultString == '1':
-        await ctx.send((ctx.author.mention) + "  :game_die:\n**Critical Failure!** " + resultString)
+        await ctx.send(ctx.author.mention + "  :game_die:\n**Critical Failure!** " + resultString)
     elif numDice == '1':
-        await ctx.send((ctx.author.mention) + "  :game_die:\n**Result:** " + resultString)
+        await ctx.send(ctx.author.mention + "  :game_die:\n**Result:** " + resultString)
     else:
-        await ctx.send((ctx.author.mention) + "  :game_die:\n**Result:** " + resultString + "\n**Total:** " + str(results))
-
-
-
-@bot.command()
-async def c(ctx,*,s):
-    await ctx.send(p(s))
+        await ctx.send(ctx.author.mention + "  :game_die:\n**Result:** " + resultString + "\n**Total:** " + str(results))
 
 # outputs username + whole message after command
 @bot.command()
 async def cTest(ctx, *, arg):
-    user = (ctx.message.author)
+    user = ctx.message.author
     formatUser = str(user)
     # gets rid of anything past # for example klb#5169 -> klb
     x = formatUser.index("#")
@@ -180,7 +174,7 @@ async def joined(ctx, member: discord.Member):
 # ////////////////////////////////////
 @bot.command()  # shuts down the bot
 async def stop(ctx):
-    await ctx.send(("Logging out. See you next session!").format(ctx.author))
+    await ctx.send("Logging out. See you next session!".format(ctx.author))
     sys.exit()
 
 
