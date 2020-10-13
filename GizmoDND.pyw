@@ -2,15 +2,11 @@ import discord
 import asyncio
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
 from discord.ext.commands import bot
-import traceback
-import time
 import random
 from random import randint  # For use in dice rolling
 import sys  # Safety feature for shutting down the bot, so I've read
 from discord.utils import get
-import urllib.parse, urllib.request, re
 import time
-import re
 from GizmoCommands import *
 
 # /////////// Start Up, "Front End" /////////////
@@ -191,5 +187,11 @@ async def stop(ctx):
     await ctx.send("Logging out. See you next session!".format(ctx.author))
     sys.exit()
 
+
+@bot.command()
+async def insult(ctx):
+    """random insult"""
+    lines = open('insults.txt').read().splitlines()
+    await ctx.send(random.choice(lines))
 
 bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
