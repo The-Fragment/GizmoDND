@@ -179,6 +179,28 @@ async def joined(ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
 
+@bot.command()
+async def googy(ctx, *text: str):
+      """LMGTFY search"""
+      await ctx.send('http://lmgtfy.com/?q=' + '+'.join(text))
+
+@bot.command()
+async def src(ctx, *text:str):
+    """Search google and embed results, WIP"""
+    beanEmbed = discord.Embed(title='Your Search:', description=('ahhhh'), url="https://google.com/search?q=" + "+".join(text))
+    await ctx.send(embed=beanEmbed)
+
+@bot.command()
+async def insult(ctx):
+    """random insult"""
+    lines = open('insults.txt').read().splitlines()
+    await ctx.send(random.choice(lines))
+#@bot.command()
+#async def cursed(ctx):
+#    cursedEmbed(titled="Enjoy...", description="i know you'll cooom")
+#    embed.set_image(url="https://cdn.ebaumsworld.com/2019/10/03/044615/86084684/cursed-images-beans-6.jpg")
+#    await ctx.send(embed=cursedEmbed)
+
 
 # ///////////Test/////////////////////
 # ////////////////////////////////////
@@ -188,10 +210,5 @@ async def stop(ctx):
     sys.exit()
 
 
-@bot.command()
-async def insult(ctx):
-    """random insult"""
-    lines = open('insults.txt').read().splitlines()
-    await ctx.send(random.choice(lines))
 
 bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
