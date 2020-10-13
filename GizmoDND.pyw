@@ -195,11 +195,11 @@ async def insult(ctx):
     """random insult"""
     lines = open('insults.txt').read().splitlines()
     await ctx.send(random.choice(lines))
-#@bot.command()
-#async def cursed(ctx):
-#    cursedEmbed(titled="Enjoy...", description="i know you'll cooom")
-#    embed.set_image(url="https://cdn.ebaumsworld.com/2019/10/03/044615/86084684/cursed-images-beans-6.jpg")
-#    await ctx.send(embed=cursedEmbed)
+
+@bot.command()  # allows users to test the response of the bot from Discord
+async def cursed(ctx):
+    fp = 'images/'
+    await ctx.send(file=discord.File(fp + 'cursed-images-beans-6.jpg'))
 
 
 # ///////////Test/////////////////////
