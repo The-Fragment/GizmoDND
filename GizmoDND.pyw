@@ -11,6 +11,7 @@ from discord.utils import get
 import urllib.parse, urllib.request, re
 import time
 import re
+from GizmoCommands import *
 
 # /////////// Start Up, "Front End" /////////////
 bot = discord.Client()
@@ -93,48 +94,23 @@ async def on_command_error(error, ctx):
 
 ##[Start-Dice-Functions]##
 @bot.command()
-async def r(ctx, roll: str):
-    results = 0
-    resultString = ''
-    try:
-        try:
-            numDice = roll.split('d')[0]
-            diceVal = roll.split('d')[1]
-        except Exception as e:
-            print(e)
-            await ctx.send("Use proper format! #d# %s." % (ctx.author.mention))
-            return
-        if int(numDice) > 500:
-            await ctx.send("Woah! too much!" % (ctx.author.mention))
-            return
+async def r(ctx, rolls: str):
+    resultString,results,numDice = roll(rolls)
+    await ctx.send(roll_str(rolls) + " for %s" % (ctx.message.author.name))
+    if resultString == '20':
+        await ctx.send((ctx.author.mention) + "  :game_die:\n**Critical Success!** " + resultString)
+    elif resultString == '1':
+        await ctx.send((ctx.author.mention) + "  :game_die:\n**Critical Failure!** " + resultString)
+    elif numDice == '1':
+        await ctx.send((ctx.author.mention) + "  :game_die:\n**Result:** " + resultString)
+    else:
+        await ctx.send((ctx.author.mention) + "  :game_die:\n**Result:** " + resultString + "\n**Total:** " + str(results))
 
-        await ctx.send("Rolling %s d%s for %s" % (numDice, diceVal, ctx.message.author.name))
-        rolls, limit = map(int, roll.split('d'))
-        for r in range(rolls):
-            number = random.randint(1, limit)
-            results = results + number
-            if resultString == '':
-                resultString += str(number)
-            else:
-                resultString += ', ' + str(number)
 
-        if resultString == '20':
-            await ctx.send((ctx.author.mention) + "  :game_die:\n**Critical Success!** " + resultString)
-        else:
-            if resultString == '1':
-                await ctx.send((ctx.author.mention) + "  :game_die:\n**Critical Failure!** " + resultString)
-            else:
 
-                if numDice == '1':
-                    await ctx.send((ctx.author.mention) + "  :game_die:\n**Result:** " + resultString)
-                else:
-                    await ctx.send(
-                        (ctx.author.mention) + "  :game_die:\n**Result:** " + resultString + "\n**Total:** " + str(
-                            results))
-
-    except Exception as e:
-        print(e)
-        return
+@bot.command()
+async def c(ctx,*,s):
+    await ctx.send(p(s))
 
 # outputs username + whole message after command
 @bot.command()
