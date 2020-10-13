@@ -77,6 +77,16 @@ async def dev(ctx):
     await ctx.send(embed=devEmbed)
     # playing with embeds
 
+@bot.command()
+async def help(ctx):
+    helpEmbed=discord.Embed(title="In your hour of need! Gizmo is here~", description="**Commands:**\n"+
+                            "**^r** -> Roll some dice (Format 1d20)\n"+
+                            "**^purge** -> Delete some messages (Format purge 3)\n"+
+                            "**^choose** -> Gizmo will decide!\n(Format:^choose pizza burgers)\n" +
+                            "**^speak** -> Gizmo will speak to you\n" +
+                            "**^dev** -> See the Development Team/Version\n"+
+                            "\n\n***Gizmo is still a kitten, let us know about any possible bugs!***", color=discord.Color.orange())
+    await ctx.author.send(embed=helpEmbed)
 
 # ////// Who's who: ///////
 async def on_member_join(ctx, member):
@@ -157,6 +167,10 @@ async def purge_error(ctx, error):
 async def test(ctx):
     await ctx.send('Ready to roll!'.format(ctx.author))
 
+@bot.command()
+async def speak(ctx):
+    meow = ['meow','Meow!','Meoooooow','mew','purrrrr','....','no','Mew!','Meow','Mew','purr']
+    await ctx.send(random.choice(meow))
 
 @bot.command()
 async def choose(ctx, *choices: str):
