@@ -187,7 +187,7 @@ async def googy(ctx, *text: str):
 @bot.command()
 async def src(ctx, *text:str):
     """Search google and embed results, WIP"""
-    beanEmbed = discord.Embed(title='Your Search:', description=('ahhhh'), url="https://google.com/search?q=" + "+".join(text))
+    beanEmbed = discord.Embed(title='Your Search:', description=('Here ->'), url="https://google.com/search?q=" + "+".join(text))
     await ctx.send(embed=beanEmbed)
 
 @bot.command()
@@ -200,6 +200,12 @@ async def insult(ctx):
 async def cursed(ctx):
     fp = 'images/'
     await ctx.send(file=discord.File(fp + 'cursed-images-beans-6.jpg'))
+
+@bot.command()
+async def compliment(ctx):
+    """random compliment"""
+    comp = open('compliment.txt').read().splitlines()
+    await ctx.send(random.choice(comp))
 
 
 # ///////////Test/////////////////////
