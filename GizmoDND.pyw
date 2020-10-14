@@ -1,5 +1,5 @@
 import discord
-import asyncio
+import asyncio, aiohttp
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
 from discord.ext.commands import bot
 import random
@@ -214,6 +214,97 @@ async def compliment(ctx):
 async def stop(ctx):
     await ctx.send("Logging out. See you next session!".format(ctx.author))
     sys.exit()
+
+
+
+"""The lack of func w/ this command doesn't break anything"""
+"""This is literally supposed to be the .magik command that 'warps' images + gifs"""
+"""I'd really like to bring it over to Gizmo, so lets see what we can do."""
+"""Issue i've come across is outdated code - session.get in line 228 is not being used correctly"""
+"""was just trying something, now a place holder."""
+"""Replaced several different 'self.bot' methods with ctx.send"""
+"""NotSoBot's code:https://github.com/NotSoSuper/NotSoBot/blob/d21f5cc13f92e614b1bdd49d1988413fc6c33f02/mods/Fun.py#L168"""
+"""----Flop----"""
+@bot.command()
+async def magik(ctx,*urls:str):
+    """fuck notsobot lmao"""
+    try:
+        get_images = await session.get(ctx, urls=urls, limit=6, scale=5)
+        if not get_images:
+            return
+        img_urls = get_images[0]
+        scale = get_images[1]
+        scale_msg = get_images[2]
+        if scale_msg is None:
+            scale_msg = ''
+        msg = await ctx.send("ok, processing")
+        list_imgs = []
+        for url in img_urls:
+            b = await self.bytes_download(url)
+            if b is False:
+                if len(img_urls) > 1:
+                    await ctx.send(':warning: **Command download function failed...**')
+                    return
+                continue
+            list_imgs.append(b)
+        final, content_msg = await self.bot.loop.run_in_executor(None, self.do_magik, scale, *list_imgs)
+        if type(final) == str:
+            await self.bot.say(final)
+            return
+        if content_msg is None:
+            content_msg = scale_msg
+        else:
+            content_msg = scale_msg + content_msg
+        await self.bot.delete_message(msg)
+        await self.bot.upload(final, filename='magik.png', content=content_msg)
+    except discord.errors.Forbidden:
+        await ctx.send(":warning: **I do not have permission to send files!**")
+    except Exception as e:
+        await ctx.send(e)
+
+    def do_gmagik(self, ctx, gif, gif_dir, rand):
+        try:
+            try:
+                frame = PIL.Image.open(gif)
+            except:
+                return ':warning: Invalid Gif.'
+            if frame.size >= (3000, 3000):
+                os.remove(gif)
+                return ':warning: `GIF resolution exceeds maximum >= (3000, 3000).`'
+            nframes = 0
+            while frame:
+                frame.save('{0}/{1}_{2}.png'.format(gif_dir, nframes, rand), 'GIF')
+                nframes += 1
+                try:
+                    frame.seek(nframes)
+                except EOFError:
+                    break
+            imgs = glob.glob(gif_dir + "*_{0}.png".format(rand))
+            if len(imgs) > 150 and ctx.message.author.id != self.bot.owner.id:
+                for image in imgs:
+                    os.remove(image)
+                os.remove(gif)
+                return ":warning: `GIF has too many frames (>= 150 Frames).`"
+            for image in imgs:
+                try:
+                    im = wand.image.Image(filename=image)
+                except:
+                    continue
+                i = im.clone()
+                i.transform(resize='800x800>')
+                i.liquid_rescale(width=int(i.width * 0.5), height=int(i.height * 0.5), delta_x=1, rigidity=0)
+                i.liquid_rescale(width=int(i.width * 1.5), height=int(i.height * 1.5), delta_x=2, rigidity=0)
+                i.resize(i.width, i.height)
+                i.save(filename=image)
+            return True
+        except Exception as e:
+            exc_type, exc_obj, tb = sys.exc_info()
+            f = tb.tb_frame
+            lineno = tb.tb_lineno
+            filename = f.f_code.co_filename
+            linecache.checkcache(filename)
+            line = linecache.getline(filename, lineno, f.f_globals)
+            print('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
 
 
 
