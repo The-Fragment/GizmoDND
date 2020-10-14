@@ -7,9 +7,7 @@ from random import randint  # For use in dice rolling
 import sys  # Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import time
-
 from pip._internal.network import session
-
 from GizmoCommands import *
 
 # /////////// Start Up, "Front End" /////////////
@@ -27,6 +25,26 @@ https://github.com/meew0/discord-bot-best-practices
 Helpful:
 https://github.com/Rapptz/discord.py
 """
+
+@bot.event
+async def on_guild_join(guild):
+    with open("prefixes.json", "r") as f:
+        prefixes=json.load(f)
+    prefixes[str(guild.id)]="^"
+
+    with open("prefixes.json", "w") as f:
+        json.dump(prefixes, f, indent=4)
+
+    await ctx.send(embed=help)
+
+@bot.event
+async def on_guild_remove(guild):
+    with open("prefixes.json", "r") as f:
+        prefixes=json.load(f)
+    prefixes.pop(str(guild.id))
+    with open("prefixes.json", "w") as f:
+        json.dump(prefixs, f, indent=4)
+
 
 
 @bot.event
