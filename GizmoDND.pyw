@@ -1,3 +1,5 @@
+import json
+
 import discord
 import asyncio, aiohttp
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
@@ -35,7 +37,7 @@ async def on_guild_join(guild):
     with open("prefixes.json", "w") as f:
         json.dump(prefixes, f, indent=4)
 
-    await ctx.send(embed=help)
+    await guild.send(embed=help)
 
 @bot.event
 async def on_guild_remove(guild):
@@ -43,7 +45,7 @@ async def on_guild_remove(guild):
         prefixes=json.load(f)
     prefixes.pop(str(guild.id))
     with open("prefixes.json", "w") as f:
-        json.dump(prefixs, f, indent=4)
+        json.dump(prefixes, f, indent=4)
 
 
 
