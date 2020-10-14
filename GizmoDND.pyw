@@ -1,5 +1,5 @@
 import json
-
+from PIL import *
 import discord
 import asyncio, aiohttp
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
@@ -9,8 +9,9 @@ from random import randint  # For use in dice rolling
 import sys  # Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import time
-from pip._internal.network import session
+import pip._internal.network
 from GizmoCommands import *
+from imgurpython import ImgurClient
 
 # /////////// Start Up, "Front End" /////////////
 bot = discord.Client()
@@ -249,10 +250,10 @@ async def stop(ctx):
 """NotSoBot's code:https://github.com/NotSoSuper/NotSoBot/blob/d21f5cc13f92e614b1bdd49d1988413fc6c33f02/mods/Fun.py#L168"""
 """----Flop----"""
 @bot.command()
-async def magik(ctx,*urls:str):
+async def magik(self, ctx,*urls:str):
     """fuck notsobot lmao"""
     try:
-        get_images = await session.get(ctx, urls=urls, limit=6, scale=5)
+        get_images = await self.bot.get_images(ctx, urls=urls, limit=6, scale=5)
         if not get_images:
             return
         img_urls = get_images[0]
@@ -260,30 +261,30 @@ async def magik(ctx,*urls:str):
         scale_msg = get_images[2]
         if scale_msg is None:
             scale_msg = ''
-        msg = await ctx.send("ok, processing")
+        msg = await self.send("ok, processing")
         list_imgs = []
         for url in img_urls:
-            b = await ctx.bytes_download(url)
+            b = await self.bytes_download(url)
             if b is False:
                 if len(img_urls) > 1:
-                    await ctx.send(':warning: **Command download function failed...**')
+                    await self.bot.say(':warning: **Command download function failed...**')
                     return
                 continue
             list_imgs.append(b)
-        final, content_msg = await ctx.bot.loop.run_in_executor(None, ctx.do_magik, scale, *list_imgs)
+        final, content_msg = await self.bot.loop.run_in_executor(None, self.do_magik, scale, *list_imgs)
         if type(final) == str:
-            await ctx.bot.say(final)
+            await self.bot.say(final)
             return
         if content_msg is None:
             content_msg = scale_msg
         else:
             content_msg = scale_msg + content_msg
-        await ctx.bot.delete_message(msg)
-        await ctx.bot.upload(final, filename='magik.png', content=content_msg)
+        await self.bot.delete_message(msg)
+        await self.bot.upload(final, filename='magik.png', content=content_msg)
     except discord.errors.Forbidden:
-        await ctx.send(":warning: **I do not have permission to send files!**")
+        await self.send(":warning: **I do not have permission to send files!**")
     except Exception as e:
-        await ctx.send(e)
+        await self.send(e)
 
 
 bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
