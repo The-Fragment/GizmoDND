@@ -7,6 +7,9 @@ from random import randint  # For use in dice rolling
 import sys  # Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import time
+
+from pip._internal.network import session
+
 from GizmoCommands import *
 
 # /////////// Start Up, "Front End" /////////////
@@ -240,72 +243,27 @@ async def magik(ctx,*urls:str):
         msg = await ctx.send("ok, processing")
         list_imgs = []
         for url in img_urls:
-            b = await self.bytes_download(url)
+            b = await ctx.bytes_download(url)
             if b is False:
                 if len(img_urls) > 1:
                     await ctx.send(':warning: **Command download function failed...**')
                     return
                 continue
             list_imgs.append(b)
-        final, content_msg = await self.bot.loop.run_in_executor(None, self.do_magik, scale, *list_imgs)
+        final, content_msg = await ctx.bot.loop.run_in_executor(None, ctx.do_magik, scale, *list_imgs)
         if type(final) == str:
-            await self.bot.say(final)
+            await ctx.bot.say(final)
             return
         if content_msg is None:
             content_msg = scale_msg
         else:
             content_msg = scale_msg + content_msg
-        await self.bot.delete_message(msg)
-        await self.bot.upload(final, filename='magik.png', content=content_msg)
+        await ctx.bot.delete_message(msg)
+        await ctx.bot.upload(final, filename='magik.png', content=content_msg)
     except discord.errors.Forbidden:
         await ctx.send(":warning: **I do not have permission to send files!**")
     except Exception as e:
         await ctx.send(e)
-
-    def do_gmagik(self, ctx, gif, gif_dir, rand):
-        try:
-            try:
-                frame = PIL.Image.open(gif)
-            except:
-                return ':warning: Invalid Gif.'
-            if frame.size >= (3000, 3000):
-                os.remove(gif)
-                return ':warning: `GIF resolution exceeds maximum >= (3000, 3000).`'
-            nframes = 0
-            while frame:
-                frame.save('{0}/{1}_{2}.png'.format(gif_dir, nframes, rand), 'GIF')
-                nframes += 1
-                try:
-                    frame.seek(nframes)
-                except EOFError:
-                    break
-            imgs = glob.glob(gif_dir + "*_{0}.png".format(rand))
-            if len(imgs) > 150 and ctx.message.author.id != self.bot.owner.id:
-                for image in imgs:
-                    os.remove(image)
-                os.remove(gif)
-                return ":warning: `GIF has too many frames (>= 150 Frames).`"
-            for image in imgs:
-                try:
-                    im = wand.image.Image(filename=image)
-                except:
-                    continue
-                i = im.clone()
-                i.transform(resize='800x800>')
-                i.liquid_rescale(width=int(i.width * 0.5), height=int(i.height * 0.5), delta_x=1, rigidity=0)
-                i.liquid_rescale(width=int(i.width * 1.5), height=int(i.height * 1.5), delta_x=2, rigidity=0)
-                i.resize(i.width, i.height)
-                i.save(filename=image)
-            return True
-        except Exception as e:
-            exc_type, exc_obj, tb = sys.exc_info()
-            f = tb.tb_frame
-            lineno = tb.tb_lineno
-            filename = f.f_code.co_filename
-            linecache.checkcache(filename)
-            line = linecache.getline(filename, lineno, f.f_globals)
-            print('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
-
 
 
 bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
