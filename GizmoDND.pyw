@@ -9,9 +9,10 @@ from random import randint  # For use in dice rolling
 import sys  # Safety feature for shutting down the bot, so I've read
 from discord.utils import get
 import time
-import pip._internal.network
 from GizmoCommands import *
 from imgurpython import ImgurClient
+import requests
+from bs4 import BeautifulSoup
 
 # /////////// Start Up, "Front End" /////////////
 bot = discord.Client()
@@ -239,7 +240,21 @@ async def stop(ctx):
     await ctx.send("Logging out. See you next session!".format(ctx.author))
     sys.exit()
 
+"""
+Pretty much this function just returns a random image of a cat
+Its web scraping but like its kinda lame but hey cool cats!
+"""
 
+@bot.command()
+async def cat(ctx):
+    await ctx.send("Enjoy a random cat!")
+    source = requests.get('http://theoldreader.com/kittens/600/400/js').text
+    soup = BeautifulSoup(source, 'lxml')
+    img = soup.find('img')
+    rcurl = "http://theoldreader.com" + str(img['src'])
+    e = discord.Embed()
+    e.set_image(url=rcurl)
+    await ctx.send(embed = e)
 
 """The lack of func w/ this command doesn't break anything"""
 """This is literally supposed to be the .magik command that 'warps' images + gifs"""
