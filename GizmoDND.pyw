@@ -1,16 +1,12 @@
 import json
-from PIL import *
 import discord
 import asyncio, aiohttp
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
 from discord.ext.commands import bot
-import random
-from random import randint  # For use in dice rolling
 import sys  # Safety feature for shutting down the bot, so I've read
-from discord.utils import get
+
 import time
 from GizmoCommands import *
-from imgurpython import ImgurClient
 import requests
 from bs4 import BeautifulSoup
 
