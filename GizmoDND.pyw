@@ -217,10 +217,15 @@ async def insult(ctx):
     lines = open('insults.txt').read().splitlines()
     await ctx.send(random.choice(lines))
 
-@bot.command()  # allows users to test the response of the bot from Discord
+@bot.command()
 async def cursed(ctx):
     fp = 'images/'
     await ctx.send(file=discord.File(fp + 'cursed-images-beans-6.jpg'))
+
+@bot.command()
+async def blessed(ctx):
+    fp = 'images/'
+    await ctx.send(file=discord.File(fp + 'blessed.jpg'))
 
 @bot.command()
 async def compliment(ctx):
