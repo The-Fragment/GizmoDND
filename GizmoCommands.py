@@ -1,6 +1,5 @@
 import random
 
-
 # Ex. takes in 2d20 and outputs the string Rolling 2 d20
 def roll_str(rolls):
 	numDice = rolls.split('d')[0]
