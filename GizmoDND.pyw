@@ -303,4 +303,4 @@ async def magik(self, ctx,*urls:str):
         await self.send(e)
 
 
-bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
+bot.run('token')
