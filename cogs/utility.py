@@ -1,17 +1,16 @@
-import asyncio
 import sys
 import discord
 from discord.ext import commands
 from discord.ext.commands import bot
-from GizmoCommands import *
-
+intents = discord.Intents.default()
+intents.members = True
 
 class UtilityCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
 
-@bot.command()
+@bot.Command()
 async def dev(self, ctx):
     devEmbed = discord.Embed(title="Developers:",
                              description="**These peeps worked to bring me to me to what I am today:**\n"
@@ -23,7 +22,7 @@ async def dev(self, ctx):
     # playing with embeds
 
 
-@bot.command()
+@bot.Command()
 async def help(self, ctx):
     helpEmbed = discord.Embed(title="In your hour of need! Gizmo is here~",
                               description="**Commands:**\n" +
@@ -57,35 +56,9 @@ async def joined(self, ctx, member: discord.Member):
 #         await ctx.send('Please use proper formatting. Use ^help for more info.')
 #
 
-
-@bot.event
-async def status_task():
-    while True:
-        await bot.change_presence(status=discord.Status.online, activity=discord.Game('Depression in VR'))
-        await asyncio.sleep(45)
-        await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('with Jays mom'))
-        await asyncio.sleep(45)
-        await bot.change_presence(status=discord.Status.online, activity=discord.Game('Cat Simulator 2'))
-        await asyncio.sleep(45)
-        await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('Playing Genshin Impact'))
-        await asyncio.sleep(45)
-        await bot.change_presence(status=discord.Status.idle, activity=discord.Game('osu!'))
-        await asyncio.sleep(45)
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="MEGALOVANIA"))
-        await asyncio.sleep(45)
-        await bot.change_presence(
-            activity=discord.Activity(type=discord.ActivityType.watching, name="Emperor's New Groove"))
-        await asyncio.sleep(45)
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.streaming, name="Among Us"))
-        await asyncio.sleep(45)
-        await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.streaming, name="Beat Saber"))
-        await asyncio.sleep(45)
-
-
 """ outputs username + whole message after command """
 
-
-@bot.command()
+@bot.Command()
 async def cTest(self, ctx, *, arg):
     user = ctx.message.author
     formatUser = str(user)
@@ -96,12 +69,12 @@ async def cTest(self, ctx, *, arg):
     await ctx.send(embed=testVar)
 
 
-@bot.command()  # allows users to test the response of the bot from Discord
+@bot.Command()  # allows users to test the response of the bot from Discord
 async def test(ctx):
     await ctx.send('Ready to roll!'.format(ctx.author))
 
 
-@bot.command()  # shuts down the bot
+@bot.Command()  # shuts down the bot
 async def stop(ctx):
     await ctx.send("Logging out. See you next session!".format(ctx.author))
     sys.exit()

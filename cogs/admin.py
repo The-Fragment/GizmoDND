@@ -8,20 +8,20 @@ class AdminCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @bot.command()
+    @bot.Command()
     async def text(self, ctx, name, category: discord.CategoryChannel = None):
         guild = ctx.guild
         await guild.create_text_channel(name=name, category=category)
         await ctx.send(f'Created text channel `{name}`')
 
-    @bot.command()
+    @bot.Command()
     async def voice(self, ctx, name, category: discord.CategoryChannel = None):
         guild = ctx.guild
         await guild.create_voice_channel(name=name, category=category)
         await ctx.send(f'Created voice channel `{name}`')
 
-    @bot.command()
-    @commands.bot_has_permissions(administrator=True)
+    @bot.Command()
+    @commands.has_guild_permissions(administrator=True)
     async def purge(self, ctx, limit: int):
         await ctx.channel.purge(limit=limit + 1)
         await asyncio.sleep(2)
@@ -33,7 +33,7 @@ class AdminCog(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("Ha! You're not worthy!")
 
-    @bot.command()
+    @bot.Command()
     @commands.is_owner()
     async def kick(self, ctx, member: discord.Member, *, reason=None):
         await member.kick(reason=reason)

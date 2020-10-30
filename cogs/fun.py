@@ -10,33 +10,33 @@ class FunCog(commands.Cog):
     def __init__(self):
         self.bot = bot
 
-    @bot.command()
+    @bot.Command()
     async def speak(self, ctx):
         meow = ['meow', 'Meow!', 'Meoooooow', 'mew', 'purrrrr', '....', 'no', 'Mew!', 'Meow', 'Mew', 'purr']
         await ctx.send(random.choice(meow))
 
-    @bot.command()
+    @bot.Command()
     async def choose(self,ctx, *choices: str):
         """Chooses between multiple choices."""
         await ctx.send(random.choice(choices))
 
-    @bot.command()
+    @bot.Command()
     async def insult(self, ctx):
         """random insult"""
         lines = open('../insults.txt').read().splitlines()
         await ctx.send(random.choice(lines))
 
-    @bot.command()
+    @bot.Command()
     async def cursed(self, ctx):
         fp = 'images/'
         await ctx.send(file=discord.File(fp + 'cursed-images-beans-6.jpg'))
 
-    @bot.command()
+    @bot.Command()
     async def blessed(self, ctx):
         fp = 'images/'
         await ctx.send(file=discord.File(fp + 'blessed.jpg'))
 
-    @bot.command()
+    @bot.Command()
     async def compliment(self, ctx):
         """random compliment"""
         comp = open('../compliment.txt').read().splitlines()
@@ -44,12 +44,12 @@ class FunCog(commands.Cog):
 
 
 
-    @bot.command()
+    @bot.Command()
     async def googy(self, ctx, *text: str):
         """LMGTFY search"""
         await ctx.send('http://lmgtfy.com/?q=' + '+'.join(text))
 
-    @bot.command()
+    @bot.Command()
     async def cat(self, ctx):
         await ctx.send("Enjoy a random cat!")
         source = requests.get('http://theoldreader.com/kittens/600/400/js').text
@@ -60,7 +60,7 @@ class FunCog(commands.Cog):
         e.set_image(url=rcurl)
         await ctx.send(embed=e)
 
-    @bot.command()
+    @bot.Command()
     async def src(self, ctx, *text: str):
         """Search google and embed results, WIP"""
         beanEmbed = discord.Embed(title='Your Search:', description=('Here ->'),
@@ -68,5 +68,5 @@ class FunCog(commands.Cog):
         await ctx.send(embed=beanEmbed)
 
 
-def setup(client):
+def setup(bot):
     bot.add_cog(FunCog(bot))

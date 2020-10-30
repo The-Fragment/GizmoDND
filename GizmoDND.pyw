@@ -26,8 +26,8 @@ bot = commands.Bot(command_prefix=get_prefix, description='Testing this function
 if __name__=='GizmoDND':
     for extension in inital_extensions:
         bot.load_extension(extension)
-bot = discord.Client()
 #bot = commands.Bot(command_prefix='^')
+bot.remove_command('help')
 intents = discord.Intents.default()
 intents.members = True
 """
@@ -44,7 +44,31 @@ https://github.com/Rapptz/discord.py
 async def on_ready():
     print("Ready to roll!")
     print("--------------")
-    print(time.strftime("Time at start:\n" + "%H:%M:%S\n"))
+    print(time.strftime("Time at start:\n" + "%H:%M:%S\n"+
+                        "%m/%d/%Y\n"
+                        + "--------------"))
+    while True:
+           await bot.change_presence(status=discord.Status.online, activity=discord.Game('Depression in VR'))
+           await asyncio.sleep(45)
+           await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('with Jays mom'))
+           await asyncio.sleep(45)
+           await bot.change_presence(status=discord.Status.online, activity=discord.Game('Cat Simulator 2'))
+           await asyncio.sleep(45)
+           await bot.change_presence(status=discord.Status.dnd, activity=discord.Game('Playing Genshin Impact'))
+           await asyncio.sleep(45)
+           await bot.change_presence(status=discord.Status.idle, activity=discord.Game('osu!'))
+           await asyncio.sleep(45)
+           await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="MEGALOVANIA"))
+           await asyncio.sleep(45)
+           await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="Emperor's New Groove"))
+           await asyncio.sleep(45)
+           await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.streaming, name="Among Us"))
+           await asyncio.sleep(45)
+           await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.streaming, name="Beat Saber"))
+           await asyncio.sleep(45)
+           await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= "For ^ || ^help"))
+           await asyncio.sleep(45)
+
 
 ###------Gonna worry about this one later lol----------------------------------------
 """
