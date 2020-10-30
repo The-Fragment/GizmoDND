@@ -1,8 +1,8 @@
 import discord
 import os
 import asyncio
+import traceback
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
-from discord.ext.commands import bot
 import sys  # Safety feature for shutting down the bot, so I've read
 import time
 from GizmoCommands import *
@@ -11,23 +11,22 @@ from bs4 import BeautifulSoup
 from cogs import *
 
 
-def get_prefix(bot, message):
-    """should be a callable prefix, allow perserver"""
-    prefixes = ['^','jizz','>>']
-    if not message.guild:
-        return '?'
-    return commands.when_mentioned_or(*prefixes)(bot, message)
+#async def get_prefix(bot, message):
+#   """should be a callable prefix, allow perserver"""
+#   prefixes = ['^','jizz','>>']
+#   if not message.guild:
+#       return '?'
+#   return commands.when_mentioned_or(*prefixes)(bot, message)
 """Only allow ? in DM, If we're in a guild allows for Bot mention or Prefix in List"""
 inital_extensions = ['cogs.dnd',
                      'cogs.admin',
                      'cogs.utility',
                      'cogs.fun']
-bot = commands.Bot(command_prefix=get_prefix, description='Testing this function')
+# bot = commands.command(command_prefix=get_prefix, description='Testing this function')
 if __name__=='GizmoDND':
     for extension in inital_extensions:
         bot.load_extension(extension)
-#bot = commands.Bot(command_prefix='^')
-bot.remove_command('help')
+bot = commands.Bot(command_prefix='^')
 intents = discord.Intents.default()
 intents.members = True
 """
@@ -39,6 +38,8 @@ https://github.com/meew0/discord-bot-best-practices
 Helpful:
 https://github.com/Rapptz/discord.py
 """
+
+
 
 @bot.event
 async def on_ready():
@@ -68,6 +69,23 @@ async def on_ready():
            await asyncio.sleep(45)
            await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name= "For ^ || ^help"))
            await asyncio.sleep(45)
+
+"""class MyHelpCommand(commands.MinimalHelpCommand):
+    def get_command_signature(self, command):
+        return '{0.clean_prefix}{1.qualified_name} {1.signature}'.format(self, command)
+
+class MyCog(commands.Cog):
+    def __init__(self, bot):
+        self._original_help_command = bot.help_command
+        bot.help_command = MyHelpCommand()
+        bot.help_command.cog = self
+
+    def cog_unload(self):
+        self.bot.help_command = self._original_help_command
+        saving this for later -- supposed to preserve the usage of the help command while allowing customize"""
+
+
+
 
 
 ###------Gonna worry about this one later lol----------------------------------------

@@ -5,12 +5,13 @@ from discord.ext.commands import bot
 intents = discord.Intents.default()
 intents.members = True
 
+
 class UtilityCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
 
-@bot.Command()
+@commands.command()
 async def dev(self, ctx):
     devEmbed = discord.Embed(title="Developers:",
                              description="**These peeps worked to bring me to me to what I am today:**\n"
@@ -22,7 +23,7 @@ async def dev(self, ctx):
     # playing with embeds
 
 
-@bot.Command()
+@commands.command()
 async def help(self, ctx):
     helpEmbed = discord.Embed(title="In your hour of need! Gizmo is here~",
                               description="**Commands:**\n" +
@@ -36,7 +37,7 @@ async def help(self, ctx):
     await ctx.author.send(embed=helpEmbed)
 
 
-@bot.command()
+@bot.Command()
 async def joined(self, ctx, member: discord.Member):
     """Says when a member joined."""
     await ctx.send('{0.name} joined in {0.joined_at}'.format(member))
@@ -57,6 +58,7 @@ async def joined(self, ctx, member: discord.Member):
 #
 
 """ outputs username + whole message after command """
+
 
 @bot.Command()
 async def cTest(self, ctx, *, arg):

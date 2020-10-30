@@ -5,18 +5,22 @@ from discord.ext import commands
 from discord.ext.commands import bot
 from GizmoCommands import *
 
+bot = commands.Bot(command_prefix='^')
+intents = discord.Intents.default()
+intents.members = True
+
 
 class FunCog(commands.Cog):
     def __init__(self):
         self.bot = bot
 
-    @bot.Command()
+    @bot.command()
     async def speak(self, ctx):
         meow = ['meow', 'Meow!', 'Meoooooow', 'mew', 'purrrrr', '....', 'no', 'Mew!', 'Meow', 'Mew', 'purr']
         await ctx.send(random.choice(meow))
 
-    @bot.Command()
-    async def choose(self,ctx, *choices: str):
+    @bot.command()
+    async def choose(self, ctx, *choices: str):
         """Chooses between multiple choices."""
         await ctx.send(random.choice(choices))
 
@@ -42,8 +46,6 @@ class FunCog(commands.Cog):
         comp = open('../compliment.txt').read().splitlines()
         await ctx.send(random.choice(comp))
 
-
-
     @bot.Command()
     async def googy(self, ctx, *text: str):
         """LMGTFY search"""
@@ -67,6 +69,5 @@ class FunCog(commands.Cog):
                                   url="https://google.com/search?q=" + "+".join(text))
         await ctx.send(embed=beanEmbed)
 
-
-def setup(bot):
-    bot.add_cog(FunCog(bot))
+    def setup(self):
+        self.add_cog(FunCog(self))
