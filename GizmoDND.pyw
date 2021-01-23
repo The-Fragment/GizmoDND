@@ -90,7 +90,6 @@ class MyCog(commands.Cog):
 
 ###------Gonna worry about this one later lol----------------------------------------
 """
-Pretty much this function just returns a random image of a cat
-Its web scraping but like its kinda lame but hey cool cats!
+I just took out the token cause I'm doing a public thing.
 """
-bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.e0siqGflMa3jvtcfVcOYD2km4AE', bot=True, reconnect=True)
+bot.run('TOKEN', bot=True, reconnect=True)
