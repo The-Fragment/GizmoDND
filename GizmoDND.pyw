@@ -4,7 +4,7 @@ import asyncio, aiohttp
 from discord.ext import commands  # Returns a warning, not sure why - // Commands
 from discord.ext.commands import bot
 import sys  # Safety feature for shutting down the bot, so I've read
-
+import config
 import time
 from GizmoCommands import *
 import requests
@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 
 # /////////// Start Up, "Front End" /////////////
 bot = discord.Client()
-bot = commands.Bot(command_prefix='^')
+bot = commands.Bot(command_prefix=prefix)
 bot.remove_command('help')
 intents = discord.Intents.default()
 intents.members = True
@@ -303,4 +303,4 @@ async def magik(self, ctx,*urls:str):
         await self.send(e)
 
 
-bot.run('NzYzMjEyNzg0NzExMzY4NzE1.X30bSw.tp2tlQU4e8GdwvCGYtmHM1Xaalw')
+bot.run(token, bot=True, reconnect=True)
